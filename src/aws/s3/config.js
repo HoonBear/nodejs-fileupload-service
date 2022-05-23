@@ -2,7 +2,7 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const AWS = require('aws-sdk');
 const path = require("path");                                     //file upload path module
-AWS.config.loadFromPath(__dirname.substr(0, __dirname.length - 3) + "/awscredential.json");
+AWS.config.loadFromPath(__dirname.toString().substr(0, __dirname.length - 3) + "/awscredential.json");
 
 const s3 = new AWS.S3({
     params: { Bucket: "nodefileuploadservice" }

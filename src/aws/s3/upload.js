@@ -20,15 +20,20 @@ exports.createFile = (params, fileType = 'image') => {
                 const userIdx = req.body.userIdx;
                 const folderIdx = req.body.folderIdx;
                 const uploadFileList = req.files[params];
+                const insertIdList = new Array();
 
-                uploadFileList.forEach(async(file) => {
-                    await mysqlExecutor(
+                const uploadFileListResult = uploadFileList.map(async(file) => {
+                    const createFileResult = await mysqlExecutor(
                         await mysqlStatement.createFile(),
                         [userIdx, folderIdx, file.originalname, file.key, file.location, file.mimetype]
                     );
+                    await insertIdList.push(createFileResult.insertId)
                     await s3.tmpFileMove(file.key, fileType)
-                    await s3.tmpFileDelete(file.key, fileType)
                 })
+                await Promise.all(uploadFileListResult)
+
+                res.locals.insertIdList = insertIdList;
+
                 next();
             } catch (e) {
                 console.error(e)

@@ -21,3 +21,13 @@ exports.readFile = () => {
     ORDER BY REG_DATETIME DESC
     `
 }
+
+exports.createHashtag = () => {
+    return`
+    INSERT INTO TB_HASHTAG_LIST (
+        FILE_IDX, HASHTAG
+    ) VALUES (
+        ?, ?
+    );
+    `
+}

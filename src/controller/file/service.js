@@ -9,6 +9,28 @@ exports.createFile = [
     s3.createFile('uploadImage', 'image'),
     async(req, res, next) => {
         try{
+            //const { hashtagList } = req.body;
+            const hashtagList = [
+                ["사과","바나나","귤"],
+                [],
+                ["벤츠","비엠"]
+            ]
+
+            const insertIdList = res.locals.insertIdList;
+
+            const insertIdListResult = insertIdList.map(async(id, index) => {
+                if(hashtagList[index] != []){
+                    const createHashtagResult = hashtagList[index].map(async(hashtag) => {
+                        await mysqlExecutor(
+                            await mysqlStatement.createHashtag(), [id, hashtag]
+                        )
+                    })
+                    await Promise.all (createHashtagResult)
+                }
+            })
+
+            await Promise.all(insertIdListResult)
+
             return res.send(responseJson.success(responseCode.OK, "success", []))
         } catch (e) {
             console.error(e.message);
