@@ -4,6 +4,12 @@ exports.test = async() => {
     `
 }
 
+exports.readUserPoint = async() => {
+    return`
+    SELECT * FROM TB_USER_LIST WHERE IDX = ?;
+    `
+}
+
 exports.updateUserPoint = () => {
     return `
         UPDATE TB_USER_LIST SET

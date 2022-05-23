@@ -1,3 +1,4 @@
+const user = require('../user/service');
 const responseCode = require('../../core/responseCode');
 const responseJson = require('../../core/responseJson');
 const responseError = require('../../core/responseError');
@@ -9,7 +10,13 @@ exports.createFile = [
     s3.createFile('uploadImage', 'image'),
     async(req, res, next) => {
         try{
+            const userPoint = await user.readUserPoint(req.body.userIdx)
+            const requirePoint = req.files["uploadImage"].length * 100;
+            
+            if(userPoint < requirePoint) throw new Error(0)
+            else await user.updateUserPoint(req.body.userIdx, -requirePoint)
             //const { hashtagList } = req.body;
+
             const hashtagList = [
                 ["사과","바나나","귤"],
                 [],
@@ -22,7 +29,7 @@ exports.createFile = [
                 if(hashtagList[index] != []){
                     const createHashtagResult = hashtagList[index].map(async(hashtag) => {
                         await mysqlExecutor(
-                            mysqlStatement.createHashtag(), [id, hashtag]
+                            await mysqlStatement.createHashtag(), [id, hashtag]
                         )
                     })
                     await Promise.all (createHashtagResult)
@@ -44,7 +51,7 @@ exports.readFile = async(req, res, next) => {
         const { userIdx, folderIdx } = req.query;
 
         const readFileResult = await mysqlExecutor(
-            mysqlStatement.readFile(),
+            await mysqlStatement.readFile(),
             [ userIdx, folderIdx]
         );
 
@@ -58,7 +65,7 @@ exports.readFile = async(req, res, next) => {
 exports.readHashtagRank = async(req, res, next) => {
     try{
         const readHashtagRankResult = await mysqlExecutor(
-            mysqlStatement.readHashtagRank(), []
+            await mysqlStatement.readHashtagRank(), []
         );
 
         return res.send(responseJson.success(responseCode.OK, "success", readHashtagRankResult))

@@ -7,6 +7,7 @@ const apiRouter = require('./src/route.js');
 const app = require('express')();
 const express = require('express');
 const bodyParser = require('body-parser')
+const multer = require('multer')
 
 const server = require('http').createServer(app);
 /* setting socket.io */

@@ -10,7 +10,7 @@ exports.createFolder = async(req, res, next) => {
         const { userIdx, folderName } = req.body;
 
         const createFolderResult = await mysqlExecutor(
-            mysqlStatement.createFolder(), [userIdx, folderName]
+            await mysqlStatement.createFolder(), [userIdx, folderName]
         );
 
         await user.updateUserPoint(userIdx, 1000)
@@ -27,7 +27,7 @@ exports.readFolder = async(req, res, next) => {
         const { userIdx } = req.query;
 
         const readFolderResult = await mysqlExecutor(
-            mysqlStatement.readFolder(), [userIdx]
+            await mysqlStatement.readFolder(), [userIdx]
         );
 
         return res.send(responseJson.success(responseCode.OK, "success", readFolderResult))

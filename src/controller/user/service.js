@@ -4,10 +4,23 @@ const responseError = require('../../core/responseError');
 const mysqlExecutor = require('../../model/mysqlExeutor');
 const mysqlStatement = require('./statement');
 
+exports.readUserPoint = async(userIdx) => {
+    try{
+        const readUserPointResult = await mysqlExecutor(
+            await mysqlStatement.readUserPoint(), [userIdx]
+        );
+
+        return readUserPointResult[0].POINT
+    } catch(e) {
+        console.error(e)
+        throw new Error(e)
+    }
+}
+
 exports.updateUserPoint = async(userIdx, point) => {
     try{
         await mysqlExecutor(
-            mysqlStatement.updateUserPoint(), [point, userIdx]
+            await mysqlStatement.updateUserPoint(), [point, userIdx]
         );
     } catch(e) {
         console.error(e)
@@ -20,7 +33,7 @@ exports.test = async(req, res) => {
         const { userCd } = req.query;
 
         const test = await mysqlExecutor(
-            mysqlStatement.test(), [userCd]
+            await mysqlStatement.test(), [userCd]
         );
         return res.send(responseJson.success(responseCode.OK, "success", test))
     } catch (e) {
