@@ -54,3 +54,16 @@ exports.readFile = async(req, res, next) => {
         return responseError(req, res, e.message);
     }
 }
+
+exports.readHashtagRank = async(req, res, next) => {
+    try{
+        const readHashtagRankResult = await mysqlExecutor(
+            mysqlStatement.readHashtagRank(), []
+        );
+
+        return res.send(responseJson.success(responseCode.OK, "success", readHashtagRankResult))
+    } catch (e) {
+        console.error(e.message);
+        return responseError(req, res, e.message);
+    }
+}

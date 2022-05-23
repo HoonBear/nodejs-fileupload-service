@@ -31,3 +31,21 @@ exports.createHashtag = () => {
     );
     `
 }
+
+exports.readHashtagRank = () => {
+    return `
+    SELECT HASHTAG_LIST.HASHTAG, HASHTAG_LIST.HASHTAG_CNT, RANK() OVER (ORDER BY HASHTAG_LIST.HASHTAG DESC) AS RANKING
+
+    FROM (
+        SELECT HASHTAG, COUNT(*) HASHTAG_CNT
+
+        FROM TB_HASHTAG_LIST
+
+        WHERE TB_HASHTAG_LIST.BUSE = 1
+
+        GROUP BY HASHTAG
+    ) HASHTAG_LIST
+
+    LIMIT 10
+    `
+}
