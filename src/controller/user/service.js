@@ -3,14 +3,25 @@ const responseJson = require('../../core/responseJson');
 const responseError = require('../../core/responseError');
 const mysqlExecutor = require('../../model/mysqlExeutor');
 const mysqlStatement = require('./statement');
+
+exports.updateUserPoint = async(userIdx, point) => {
+    try{
+        await mysqlExecutor(
+            mysqlStatement.updateUserPoint(), [point, userIdx]
+        );
+    } catch(e) {
+        console.error(e)
+        throw new Error(e)
+    }
+}
+
 exports.test = async(req, res) => {
     try{
         const { userCd } = req.query;
 
         const test = await mysqlExecutor(
-            await mysqlStatement.test(), [userCd]
+            mysqlStatement.test(), [userCd]
         );
-
         return res.send(responseJson.success(responseCode.OK, "success", test))
     } catch (e) {
         console.error(e.message);

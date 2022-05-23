@@ -1,3 +1,4 @@
+const user = require('../user/service');
 const responseCode = require('../../core/responseCode');
 const responseJson = require('../../core/responseJson');
 const responseError = require('../../core/responseError');
@@ -9,8 +10,10 @@ exports.createFolder = async(req, res, next) => {
         const { userIdx, folderName } = req.body;
 
         const createFolderResult = await mysqlExecutor(
-            await mysqlStatement.createFolder(), [userIdx, folderName]
+            mysqlStatement.createFolder(), [userIdx, folderName]
         );
+
+        await user.updateUserPoint(userIdx, 1000)
 
         return res.send(responseJson.success(responseCode.OK, "success", createFolderResult))
     } catch (e) {
@@ -24,7 +27,7 @@ exports.readFolder = async(req, res, next) => {
         const { userIdx } = req.query;
 
         const readFolderResult = await mysqlExecutor(
-            await mysqlStatement.readFolder(), [userIdx]
+            mysqlStatement.readFolder(), [userIdx]
         );
 
         return res.send(responseJson.success(responseCode.OK, "success", readFolderResult))

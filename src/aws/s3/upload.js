@@ -24,7 +24,7 @@ exports.createFile = (params, fileType = 'image') => {
 
                 const uploadFileListResult = uploadFileList.map(async(file) => {
                     const createFileResult = await mysqlExecutor(
-                        await mysqlStatement.createFile(),
+                        mysqlStatement.createFile(),
                         [userIdx, folderIdx, file.originalname, file.key, file.location, file.mimetype]
                     );
                     await insertIdList.push(createFileResult.insertId)

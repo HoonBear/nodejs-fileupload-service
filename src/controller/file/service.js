@@ -22,7 +22,7 @@ exports.createFile = [
                 if(hashtagList[index] != []){
                     const createHashtagResult = hashtagList[index].map(async(hashtag) => {
                         await mysqlExecutor(
-                            await mysqlStatement.createHashtag(), [id, hashtag]
+                            mysqlStatement.createHashtag(), [id, hashtag]
                         )
                     })
                     await Promise.all (createHashtagResult)
@@ -44,7 +44,7 @@ exports.readFile = async(req, res, next) => {
         const { userIdx, folderIdx } = req.query;
 
         const readFileResult = await mysqlExecutor(
-            await mysqlStatement.readFile(),
+            mysqlStatement.readFile(),
             [ userIdx, folderIdx]
         );
 
